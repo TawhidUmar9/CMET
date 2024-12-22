@@ -10,6 +10,7 @@ class BookList:
         if book.get_title() in self.books:
             return False
         self.books[book.get_title()] = book
+        return True  # Return True when book is successfully added
     
     def remove_book(self, title):
         if title == "":
@@ -56,4 +57,38 @@ class BookList:
     def get_book_count(self):
         # Return the number of books in the dictionary
         return len(self.books)
+    
+    def modify_book_title(self, title, new_title):
+        book = self.search_book_by_title(title)
+        if book is None:
+            return False
+        self.books[new_title] = self.books.pop(title)
+        book.set_title(new_title)
+        return True
+    def modify_book_author(self, title, new_author):
+        book = self.search_book_by_title(title)
+        if book is None:
+            return False
+        book.set_author(new_author)
+        return True
+    def modify_book_publisher(self, title, new_publisher):
+        book = self.search_book_by_title(title)
+        if book is None:
+            return False
+        book.set_publisher(new_publisher)
+        return True
+    def modify_book_publication_date(self, title, new_publication_date):
+        book = self.search_book_by_title(title)
+        if book is None:
+            return False
+        book.set_publication_date(new_publication_date)
+        return True
+    def modify_book_number_of_copies(self, title, new_number_of_copies):
+        book = self.search_book_by_title(title)
+        if book is None:
+            return False
+        if new_number_of_copies < 0:
+            return False
+        book.set_number_of_available_copies(new_number_of_copies)
+        return True
     

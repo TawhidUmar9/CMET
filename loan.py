@@ -39,5 +39,8 @@ class Loan:
             user = user_list.search_user_by_username(username)
             if user is None:
                 continue
-            overdued_books.append((user.get_username(), user.get_first_name(), len(self.borrowed_books[username])))
+            overdued_books.append((user.get_username(), user.get_firstname(), len(self.borrowed_books[username])))
+
+        return overdued_books
+        
                 

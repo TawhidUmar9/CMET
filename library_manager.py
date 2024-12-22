@@ -5,7 +5,7 @@ from users_list import UsersList
 from loan import Loan
 import random
 
-class Library:
+class LibraryManager:
     
     def __init__(self):
         self.book_list = BookList()
@@ -13,78 +13,73 @@ class Library:
         self.loan = Loan()
         self.book_id = {}
     
-    def add_book(self, title, author, publisher, publication_date, number_of_copies):
+    def add_book(self, title, author, year, publisher, number_of_available_copies, publication_date):
         book_id = 0
         while True:
             book_id = random.randint(1000, 9999)
             if book_id not in self.book_id:
                 break
-        book = Book(book_id, title, author, publisher, publication_date, number_of_copies)
+        book = Book(book_id,  title, author, year, publisher, number_of_available_copies, publication_date)
         return self.book_list.add_book(book)
 
-    def add_user(self, username, firstname, lastname, email):
-        user = User(username, firstname, lastname, email)
+    def add_user(self,username, firstname, surname, house_number, street_name, post_code, email_address, date_of_birth):
+        user = User(username, firstname, surname, house_number, street_name, post_code, email_address, date_of_birth)
         return self.user_list.add_user(user)
     
     def modify_book_title(self, title, new_title):
-        book = self.book_list.search_book_by_title(title)
-        if book is None:
-            return False
-        book.set_title(new_title)
-        return True
+        return self.book_list.modify_book_title(title, new_title)
     def modify_book_author(self, title, new_author):
-        book = self.book_list.search_book_by_title(title)
-        if book is None:
-            return False
-        book.set_author(new_author)
-        return True
+        return self.book_list.modify_book_author(title, new_author)
     def modify_book_publisher(self, title, new_publisher):
-        book = self.book_list.search_book_by_title(title)
-        if book is None:
-            return False
-        book.set_publisher(new_publisher)
-        return True
+        return self.book_list.modify_book_publisher(title, new_publisher)
     def modify_book_publication_date(self, title, new_publication_date):
-        book = self.book_list.search_book_by_title(title)
-        if book is None:
-            return False
-        book.set_publication_date(new_publication_date)
-        return True
+        return self.book_list.modify_book_publication_date(title, new_publication_date)
     def modify_book_number_of_copies(self, title, new_number_of_copies):
-        book = self.book_list.search_book_by_title(title)
-        if book is None:
-            return False
-        book.set_number_of_copies(new_number_of_copies)
-        return True
+        return self.book_list.modify_book_number_of_copies(title, new_number_of_copies)
     
     def modify_user_firstname(self, username, new_firstname):
-        user = self.user_list.search_user_by_username(username)
-        if user is None:
-            return False
-        user.set_firstname(new_firstname)
-        return True
+        return self.user_list.modify_user_firstname(username, new_firstname)
     def modify_user_surname(self, username, new_surname):
-        user = self.user_list.search_user_by_username(username)
-        if user is None:
-            return False
-        user.set_surname(new_surname)
-        return True
+        return self.user_list.modify_user_surname(username, new_surname)
     def modify_user_house_number(self, username, new_house_number):
-        user = self.user_list.search_user_by_username(username)
-        if user is None:
-            return False
-        user.set_house_number(new_house_number)
-        return True
+        return self.user_list.modify_user_house_number(username, new_house_number)
     def modify_user_street_name(self, username, new_street_name):
-        user = self.user_list.search_user_by_username(username)
-        if user is None:
-            return False
-        user.set_street_name(new_street_name)
-        return True
+        return self.user_list.modify_user_street_name(username, new_street_name)
     def modify_user_postcode(self, username, new_postcode):
-        user = self.user_list.search_user_by_username(username)
-        if user is None:
-            return False
-        user.set_postcode(new_postcode)
-        return True
+        return self.user_list.modify_user_postcode(username, new_postcode)
     
+    def search_book_by_title(self, title):
+        return self.book_list.search_book_by_title(title)
+    def search_book_by_author(self, author):
+        return self.book_list.search_book_by_author(author)
+    def search_book_by_publisher(self, publisher):
+        return self.book_list.search_book_by_publisher(publisher)
+    def search_book_by_publication_date(self, publication_date):
+        return self.book_list.search_book_by_publication_date(publication_date)
+    
+
+    def borrow_book(self, username, title):
+        user = self.user_list.search_user_by_username(username)
+        book = self.book_list.search_book_by_title(title)
+        if user is None or book is None:
+            return False
+        return self.loan.borrow_book(username, book)
+    
+    def return_book(self, username, title):
+        user = self.user_list.search_user_by_username(username)
+        book = self.book_list.search_book_by_title(title)
+        if user is None or book is None:
+            return False
+        return self.loan.return_book(username, book)
+    
+    def get_overdued_books(self):
+        return self.loan.get_overdued_books(self.user_list)
+    
+    def get_borrowed_books_count(self, username):
+        return self.loan.get_borrowed_books_count(username)
+    
+    def get_book_list(self):
+        return self.book_list.books
+    
+    def get_user_list(self):
+        return self.user_list.users
